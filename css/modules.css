@@ -1,0 +1,47 @@
+body{
+  background-color: antiquewhite;
+}
+select {
+  margin: 0 auto;
+  display: block;
+  margin-top: 150px;
+  font-size: 30px;
+  width: 500px;
+  background-color: rgba(226, 43, 195, 0.527);
+}
+
+h1 {
+  font-family: 'Poiret One', cursive;
+  font-size: 70px;
+  text-align: center;
+  color: rgb(0, 195, 255);
+}
+
+h2, p {
+  text-align: center;
+  font-family: Helvetica;
+  font-size: 15px;
+}
+
+h2 {
+    color: rgb(102, 19, 19);
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+p {
+  font-style: italic;
+  font-weight: bolder;
+}
+
+img {
+  object-fit: contain;
+  height: 200px;
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+}
+li:hover{
+  background-color: #11111141;
+
+}

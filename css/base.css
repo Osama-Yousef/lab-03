@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
+
+
+
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 15px auto;
+}
+
+
+
+
+li{
+  float: left;
+  list-style: none;
+  box-shadow: 0 10px 6px -6px #777;
+  border: 2px inset lightGray;
+  border-radius: 30%;
+  padding: 10px;
+  width: 320px;
+  height: 400px;
+  margin: 50px;
+  background-color: rgb(196, 255, 255);
+}
+img{
+  border-radius: 30%;   
+}
+select{
+    border-radius: 30px;
+    
+}
