@@ -7,7 +7,44 @@ select {
   margin-top: 150px;
   font-size: 30px;
   width: 500px;
-  background-color: rgba(226, 43, 195, 0.527);
+  background-color:azure;
+  padding: 5px;
+  font-family: cursive;
+}
+
+button#page1 {
+  width: 90px;
+  height: 50px;
+  font-size: larger;
+  font-family: cursive;
+  background-color: azure;
+}
+
+button#page2 {
+  width: 90px;
+  height: 50px;
+  font-size: larger;
+  font-family: cursive;
+  background-color: azure;
+}
+
+button#sortHorn {
+
+  width: 90px;
+  font-size: larger;
+  font-family: cursive;
+  background-color: azure;
+
+}
+
+button#sortTitle{
+
+padding-bottom: 55px;
+  width: 90px;
+  font-size: larger;
+  font-family: cursive;
+  background-color: azure;
+
 }
 
 h1 {
