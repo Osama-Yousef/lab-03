@@ -1,7 +1,8 @@
-'use strict'
+'use strict';
 
 
-Image.all=[];
+Image.all = [];
+let keywords = [];
 
 function Image(image_url, title, description, keyword, horns) {
     this.image_url = image_url;
@@ -9,112 +10,131 @@ function Image(image_url, title, description, keyword, horns) {
     this.description = description;
     this.keyword = keyword;
     this.horns = horns;
-Image.all.push(this);
+    Image.all.push(this);
 }
 
 Image.prototype.render = function () {
 
     let $template = $('#photo-template').html();
-    console.log('my objects', this);
-    var rendered = Mustache.render($template , this );
+    // console.log('my objects', this);
+    let rendered = Mustache.render($template, this);
     $('main').append(rendered);
 
 }
 
-let keywords = [];
 
 Image.prototype.filterKeword = function () {
-    //1 i searcg from google ( how to check if something is already in array js)
-    //2 try to find if keyword is in the array "keywords"
-    //3 if not we should push (keywords will have unique keywords)
+
+    let choice = $("#dropdown1");
     if (!(keywords.includes(this.keyword))) {
-        //4 we need to put them in the select new function
         keywords.push(this.keyword);
-        // 5 loop through the keywords append to dropdown
-        $("#dropdown1").append(`<option value='${this.keyword}'>` + this.keyword + '</option>');
+
+        choice.append(`<option value ='${this.keyword}'>${this.keyword}</option>`);
     }
-}
+};
+
+
+
+const readJson1 = () => {
+
+    $.ajax("../data/page-1.json", { method: "GET", dataType: "JSON" }).then(data => {
+        Image.all = [];
+        $("main").empty();
+        data.forEach(element => {
+
+            let obj = new Image(element.image_url, element.title, element.description, element.keyword, element.horns);
+            obj.filterKeword();
+            obj.render();
+
+        });
+    });
+};
+readJson1();
+
+
+const readJson2 = () => {
+    Image.all = [];
+    $("main").empty();
+    $.ajax("../data/page-2.json", { method: "GET", dataType: "JSON" }).then(data => {
+        data.forEach(element => {
+            let obj = new Image(element.image_url, element.title, element.description, element.keyword, element.horns);
+            obj.filterKeword();
+            obj.render();
+        });
+    });
+};
+
+
 
 
 // handlerFunction 
-$("#dropdown1").on('change', (val) => {
-    let selectedVal = val.target.value;
+$('#dropdown1').change(function () {
+
+    let selectedVal = $(this).val();
+
     //console.log(selectedVal);
-    if (selectedVal === 'default') {
-        $('li').show();
-    } else {
-        // $('li').hide();
-        $('li').hide();
-        $(`.${selectedVal}`).fadeIn(200);
-    }
+
+    $("div li ").hide();
+    $(`.${selectedVal}`).show();
+
 });
 
 
-
-// to show the contents in page-1 json on screen when i go live 
-$(document).ready(function () {
-    show('data/page-1.json');
-})
-
-
-function show(fileName){ 
-   // console.log(fileName);
-    Image.all=[]; // 1. Clear the array
-    keywords = [];// Clear the filterKeyword array and the select
-    $('#dropdown1').html(`<option value="default">Filter by keyword</option>`); 
-
-    $('#photo-template').empty();
-    $.get(fileName)
-    .then(data => {
-       
-        data.forEach(element => {
-            let newImage = new Image(element.image_url, element.title, element.description, element.keyword, element.horns);
-            newImage.filterKeword();
-            newImage.render();
-        });
-    });
-}
 
 // event handler for each ( page 1 and page 2 buttons)
-$('#page1').on('click',() => {show('data/page-1.json')});
-$('#page2').on('click', () => {show('data/page-2.json')});
 
-// make sorting function
-function sortBy(attr){ 
-    $('#photo-template').empty();
-    Image.all.sort(function (a, b) {
-        var attrOne= a[attr];
-        var attrTwo= b[attr];
-        if (attrOne < attrTwo) {
+$('#page1').on('click', () => {
+
+    $("div").remove();
+    keywords = [];
+
+    $("#dropdown1").empty(' ');
+    readJson1();
+
+});
+
+
+$('#page2').on('click', () => {
+
+    $("div").remove();
+    keywords = [];
+
+    $("#dropdown1").empty(' ');
+    readJson2();
+
+});
+
+
+
+const SortByTitle = () => {
+    Image.all.sort((a, b) => {
+
+        if (a.title.toUpperCase() < b.title.toUpperCase()) {
             return -1;
+        } else if (a.title.toUpperCase() > b.title.toUpperCase()) {
+            return 1;
         }
-        if (attrTwo < attrOne) {
-            return 1;            
-        }
-        return 0;
     });
+    $('main').empty('');
+    Image.all.forEach(element => {
+        element.render();
+    })
 }
 
 
-// event handler for sort by title button
-$('#sortTitle').on("click", ()=>{
-    sortBy('title');
-    // Image.all =[];
-    $('#photo-template').html('');
-    Image.all.forEach(element => {
-        let newImage = new Image(element.image_url, element.title, element.description, element.keyword, element.horns);
-        newImage.render();
+
+const sortByNumofHorns = () => {
+    Image.all.sort((a, b) => {
+        return a.horns - b.horns;
     });
-
-});
-
-// event handler for sort by # horns button
-$('#sortHorn').on("click", ()=>{
-    sortBy('horns');
-    $('#photo-template').html('');
+    $('main').empty();
     Image.all.forEach(element => {
-        let newImage = new Image(element.image_url, element.title, element.description, element.keyword, element.horns);
-        newImage.render();
-    });
+        element.render();
+    })
+}
 
-});
+
+$('#sortTitle').on('click', SortByTitle);
+$('#sortHorn').on('click', sortByNumofHorns);
+
+
